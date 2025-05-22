@@ -1,0 +1,268 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    --bg-color1: #fefcfe;
+    --bg-color2: #dddddd;
+    --bg-color3: #f2f3f5;
+    --bgColorPopUp: #f3f1f3;
+    --text-color: #374958;
+    --accent-color: #2a59bd;
+    --accent-color-light: #eef4ff;
+}
+
+ul {
+    list-style-type: none;
+}
+
+body {
+    font-size: 16px;
+    min-height: 100vh;
+    background-color: var(--bg-color2);
+    color: var(--text-color);
+}
+
+header {
+    background-color: var(--bg-color3);
+    color: var(--accent-color);
+    height: 10vh;
+    display: flex;
+    width: 100%;
+    align-items: center; 
+    justify-content: left;
+    border-bottom: 2px solid var(--accent-color);
+}
+
+nav {
+    width: 20%;
+    font-size: 1.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    h2 {
+        align-items: center;
+        gap: 4px;
+        display: flex;
+    }
+
+    h2 span {
+        color: var(--text-color);
+    }
+
+    h2 img{
+        height: 3rem;
+    }
+}
+
+#body-container {
+    display: flex;
+    min-height: 90vh;
+}
+
+aside {
+    flex: 1;
+    /* border-right: solid 2px var(--accent-color); */
+    background-color: var(--bg-color3);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+aside > div {
+    height: 70%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+#project-title {
+    font-size: 2rem;
+    color: var(--text-color);
+    width: 80%;
+    border-bottom: 2px solid grey;
+    text-align: center;
+    margin-top: 1rem;
+    margin-bottom: 3rem;
+}
+
+#projects-container {
+    background-color: var(--bg-color1);
+    border-radius: 20px;
+    padding: 1.5rem;
+    width: 80%;
+    align-items: center;
+    min-height: 100%;
+
+}
+
+#new-project-button {
+    width: 100%;
+    font-size: 1.2rem;
+    height: 2rem;
+}
+
+.add-btn {
+    color: var(--accent-color);
+    background-color: var(--bg-color1);
+    border: none;
+    border-radius: 10px;
+}
+
+.add-btn:hover {
+    cursor: pointer;
+    background-color: var(--accent-color-light);
+}
+
+#project-list {
+    width: 100%;
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#project-list li {
+    width: 100%;
+    height: 2rem;
+    font-size: 1.2rem;
+    margin: 0.4rem;
+    display: flex;
+    overflow: hidden;
+    border-radius: 5px;
+}
+
+#project-list li:hover {
+    outline: 2px solid var(--bg-color2);
+}
+
+#project-list button {
+    background-color: rgb(255, 101, 101);
+    border: none;
+    outline: none;
+    color: white;
+    width: 15%;
+}
+
+#project-list input {
+    height: 100%;
+    width: 85%;
+    border: none;
+    color: var(--text-color);
+    font-size: 1rem;
+    background-color: var(--bg-color3);
+    padding: 1ch;
+}
+
+#project-list input:focus {
+    outline: none;
+    border: none;
+    border-bottom: 2px solid var(--accent-color);
+    background-color: var(--accent-color-light);
+}
+
+main {
+    flex: 4;
+    display: flex;
+    justify-content: center;
+}
+
+.todolist-container {
+    margin-top: 1rem;
+    padding: 1rem;
+    height: 95%;
+    background-color: var(--bg-color1);
+    border-radius: 20px;
+    width: 60%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.todolist-heading {
+    display: flex;
+    padding: 0 2ch;
+    border-bottom: 2px solid var(--text-color);
+    text-align: center;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+}
+
+#new-todo-button {
+    font-size: 1.25rem;
+    height: 2rem;
+    display: flex;
+    justify-content: space-between;
+    outline: 2px solid var(--accent-color);
+    border-radius: 20px;
+    width: 75%;
+    padding: 0.75rem;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.todolist-list {
+    width: 75%;
+}
+
+.todolist-list li {
+    display: flex;
+    flex-direction: column;
+    margin-top: 1rem;
+    outline: 1px solid grey;
+    border-radius: 5px;
+    padding: 1ch;
+}
+
+.todolist-list > li > div {
+    display: flex;
+    width: 100%;
+
+    div {
+        flex: 1;
+        display: flex;
+    }
+}
+
+.todolist-list > li > div > div {
+    flex: 1;
+    display: flex;
+
+    button {
+        background-color: var(--accent-color);
+        color: white;
+        border: 1px solid white;
+        border-radius: 20px;
+        width: 5ch;
+        height: 5ch;
+        font-size: 0.75rem;
+    }
+
+    border: none;
+}
+
+.todolist-list > li > div > input:not([type="date"]) {
+    width: 100%;
+    border: none;
+    outline: none;
+}
+
+.todolist-list > li > div > div> input[type="date"] {
+    order: -1;
+    margin-right: 1ch;
+    width: 16ch;
+}
+
+textarea {
+    border: none;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    color: grey;
+    resize: none;
+}
+
+textarea:focus {
+    outline: none;
+}

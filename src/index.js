@@ -1,5 +1,6 @@
 import {ProjectList} from "./dom.js"
 import {Project, Todo} from "./classes.js"
+import "./styles.css"
 
 const newProjectButton = document.querySelector("#new-project-button");
 const projectListObject = document.querySelector("#project-list"); 

@@ -50,7 +50,9 @@ class Base {
         const index = Number(li.getAttribute("index"));
 
         if (this.object == Todo) {
-            this.objectList[index].data = {title: li.querySelector("input").value, desc: li.querySelector("textarea").value, dueDate: ""};
+            this.objectList[index].title = li.querySelector("input[type='text']") ? li.querySelector("input[type='text']").value : li.querySelector("input").value;
+            this.objectList[index].desc = li.querySelector("textarea").value;
+            this.objectList[index].dueDate = li.querySelector("input[type='date']").value;
         }
         else {
             this.objectList[index].name = event.currentTarget.value;
@@ -92,6 +94,42 @@ class TodoList extends Base {
         const desc = document.createElement("textarea");
         desc.value = object.desc;
         desc.addEventListener("blur", (event) => this.renameObject(event));
+
+        // Date input
+        const dateInput = document.createElement("input");
+        dateInput.type = "date";
+        dateInput.value = object.dueDate || "";
+        dateInput.addEventListener("change", (event) => this.renameObject(event));
+
+        // Due date display
+        // const dueDateSpan = document.createElement("span");
+        // if (object.dueDate) {
+        //     try {
+        //         // Use date-fns for formatting
+        //         const { format, parseISO, isValid } = require("date-fns");
+        //         const parsed = parseISO(object.dueDate);
+        //         dueDateSpan.textContent = isValid(parsed) ? format(parsed, "do MMM yyyy") : "No Due Date";
+        //     } catch {
+        //         dueDateSpan.textContent = object.dueDate;
+        //     }
+        // } else {
+        //     dueDateSpan.textContent = "No Due Date";
+        // }
+
+        // dateInput.addEventListener("change", () => {
+        //     try {
+        //         const { format, parseISO, isValid } = require("date-fns");
+        //         if (dateInput.value) {
+        //             const parsed = parseISO(dateInput.value);
+        //             dueDateSpan.textContent = isValid(parsed) ? format(parsed, "do MMM yyyy") : "No Due Date";
+        //         } else {
+        //             dueDateSpan.textContent = "No Due Date";
+        //         }
+        //     } catch {
+        //         dueDateSpan.textContent = dateInput.value || "No Due Date";
+        //     }
+        // });
+
         const buttons = document.createElement("div");
 
         const upButton = document.createElement("button");
@@ -128,6 +166,7 @@ class TodoList extends Base {
 
         objectListElement.appendChild(topContainer);
         objectListElement.appendChild(desc);
+        buttons.appendChild(dateInput);
 
         return objectListElement;
     }
@@ -166,9 +205,10 @@ class ProjectList extends Base {
 
             if (document.querySelector("#new-todo-button") === null) {
                 const newTodoButton = document.createElement("button");
-                newTodoButton.innerHTML = '<i class="fa fa-plus"></i> New Task'; 
+                newTodoButton.innerHTML = '<span class="material-symbols-outlined">add_task</span> New Task'; 
                 newTodoButton.id = "new-todo-button";
-                document.querySelector(".todolist-container").insertBefore(newTodoButton, document.querySelector(".todolist-container").firstChild);
+                newTodoButton.classList.add("add-btn");
+                document.querySelector(".todolist-container").insertBefore(newTodoButton, document.querySelector(".todolist-list"));
                 newTodoButton.addEventListener("click", () => todoList.newObject());
             }
             

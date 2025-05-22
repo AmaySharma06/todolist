@@ -48,7 +48,14 @@ class Base {
     renameObject(event) {
         const li = event.currentTarget.closest("li");
         const index = Number(li.getAttribute("index"));
-        this.objectList[index].name = event.currentTarget.value;
+
+        if (this.object == Todo) {
+            this.objectList[index].data = {title: li.querySelector("input").value, desc: li.querySelector("textarea").value, dueDate: ""};
+        }
+        else {
+            this.objectList[index].name = event.currentTarget.value;
+        }
+
         this.updateObjectDisplay();
 
         if (this.object == Project) {
@@ -80,11 +87,11 @@ class TodoList extends Base {
     createBaseObjectListElement(object) {
         const objectListElement = document.createElement("li");
         const name = document.createElement("input");
-        name.value = object.name || "";
+        name.value = object.title;
 
-        const desc = document.createElement("textbox");
+        const desc = document.createElement("textarea");
         desc.value = object.desc;
-        
+        desc.addEventListener("blur", (event) => this.renameObject(event));
         const buttons = document.createElement("div");
 
         const upButton = document.createElement("button");
@@ -107,7 +114,7 @@ class TodoList extends Base {
         })
 
         const delButton = document.createElement("button");
-        delButton.innerHTML = '<i class="fas fa-tick"></i>';
+        delButton.innerHTML = '<i class="fas fa-check"></i>';
         delButton.addEventListener("click", (event) => this.removeObject(event));
     
 
@@ -126,7 +133,8 @@ class TodoList extends Base {
     }
 
     newObject() {
-        this.objectList.push(new this.object("New Task", "", ""));
+        const newTodo = new Todo("New Task", "", "");
+        this.objectList.push(newTodo);
         this.updateObjectDisplay();
     }
 }

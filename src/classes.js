@@ -1,9 +1,22 @@
 class Todo {
+    title = "";
+    desc = "";
+    dueDate = "";
 
     constructor (title, desc, dueDate) {
         this.title = title;
         this.desc = desc;
         this.dueDate = dueDate;
+    }
+
+    set data(obj) {
+        this.title = obj.title;
+        this.desc = obj.desc;
+        this.dueDate = obj.dueDate;
+    }
+
+    get data() {
+        return {title: this.title, desc: this.desc, dueDate: this.dueDate};
     }
 }
 
@@ -20,7 +33,7 @@ class Project {
     }
 
     get data() {
-        return {name: this.name, todoList: this.#todoList};
+        return {name: this.name, todoList: this.#todoList.map((obj) => obj.data)};
     }
 
     set data(obj) {

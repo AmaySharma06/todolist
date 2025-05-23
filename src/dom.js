@@ -1,5 +1,5 @@
 import {Todo, Project} from "./classes.js"
-// TODO: Load and Store functions for Local Storage, to be used for both lists
+import {updateStorage, loadStorage} from "./storage.js";
 
 class Base {
 
@@ -26,6 +26,9 @@ class Base {
     }
 
     showObject(object) {
+        if (this.object == Project) {
+            this.objectList = loadStorage();
+        }
         const objectListElement = this.createObjectListElement(object);
         this.objectListObject.appendChild(objectListElement);
         
@@ -33,6 +36,9 @@ class Base {
     }
 
     updateObjectDisplay() {
+        if (this.object == Project) {
+            this.objectList = loadStorage();
+        }
         this.objectListObject.innerHTML = "";
         for (let i=0;i<this.objectList.length;i++) {
             const element = this.showObject(this.objectList[i]);
@@ -41,14 +47,23 @@ class Base {
     }
 
     newObject() {
+        if (this.object == Project) {
+            this.objectList = loadStorage();
+        }
         this.objectList.push(new this.object("Untitled"));
+        if (this.object == Project) updateStorage(this.objectList);
+        else {
+            updateStorage(this.projectListReference);
+        }
         this.updateObjectDisplay();
     }
 
     renameObject(event) {
+        if (this.object == Project) {
+            this.objectList = loadStorage();
+        }
         const li = event.currentTarget.closest("li");
         const index = Number(li.getAttribute("index"));
-
         if (this.object == Todo) {
             this.objectList[index].title = li.querySelector("input[type='text']") ? li.querySelector("input[type='text']").value : li.querySelector("input").value;
             this.objectList[index].desc = li.querySelector("textarea").value;
@@ -57,9 +72,11 @@ class Base {
         else {
             this.objectList[index].name = event.currentTarget.value;
         }
-
+        if (this.object == Project) updateStorage(this.objectList);
+        else {
+            updateStorage(this.projectListReference);
+        }
         this.updateObjectDisplay();
-
         if (this.object == Project) {
             const li = event.currentTarget.closest("li");
             const customEvent = {
@@ -70,20 +87,27 @@ class Base {
     }
 
     removeObject(event) {
+        if (this.object == Project) {
+            this.objectList = loadStorage();
+        }
         const li = event.currentTarget.closest("li");
         const index = Number(li.getAttribute("index"));
         this.objectList.splice(index, 1);
+        if (this.object == Project) updateStorage(this.objectList);
+        else {
+            updateStorage(this.projectListReference);
+        }
         this.updateObjectDisplay();
     }
 }
 
-
 class TodoList extends Base {
 
-    constructor (todoListObject, Todo, parentProject) {
+    constructor (todoListObject, Todo, parentProject, projectListReference) {
         super(todoListObject, Todo);
         this.parentProject = parentProject;
         this.objectList = parentProject.todoList;
+        this.projectListReference = projectListReference;
     }
 
     createBaseObjectListElement(object) {
@@ -100,35 +124,6 @@ class TodoList extends Base {
         dateInput.type = "date";
         dateInput.value = object.dueDate || "";
         dateInput.addEventListener("change", (event) => this.renameObject(event));
-
-        // Due date display
-        // const dueDateSpan = document.createElement("span");
-        // if (object.dueDate) {
-        //     try {
-        //         // Use date-fns for formatting
-        //         const { format, parseISO, isValid } = require("date-fns");
-        //         const parsed = parseISO(object.dueDate);
-        //         dueDateSpan.textContent = isValid(parsed) ? format(parsed, "do MMM yyyy") : "No Due Date";
-        //     } catch {
-        //         dueDateSpan.textContent = object.dueDate;
-        //     }
-        // } else {
-        //     dueDateSpan.textContent = "No Due Date";
-        // }
-
-        // dateInput.addEventListener("change", () => {
-        //     try {
-        //         const { format, parseISO, isValid } = require("date-fns");
-        //         if (dateInput.value) {
-        //             const parsed = parseISO(dateInput.value);
-        //             dueDateSpan.textContent = isValid(parsed) ? format(parsed, "do MMM yyyy") : "No Due Date";
-        //         } else {
-        //             dueDateSpan.textContent = "No Due Date";
-        //         }
-        //     } catch {
-        //         dueDateSpan.textContent = dateInput.value || "No Due Date";
-        //     }
-        // });
 
         const buttons = document.createElement("div");
 
@@ -172,8 +167,10 @@ class TodoList extends Base {
     }
 
     newObject() {
+        this.objectList = this.parentProject.todoList;
         const newTodo = new Todo("New Task", "", "");
         this.objectList.push(newTodo);
+        updateStorage(this.projectListReference);
         this.updateObjectDisplay();
     }
 }
@@ -189,6 +186,7 @@ class ProjectList extends Base {
     }
 
     showTodos(event) {
+        this.objectList = (this.object == Project) ? loadStorage() : loadStorage()[this.projectListReference.indexOf(this.parentProject)];
         try {
             document.querySelector("#new-todo-button").remove();
         }
@@ -199,9 +197,8 @@ class ProjectList extends Base {
             // If the project list is empty, would prevent bugging out
             this.currentProject = Number(event.currentTarget.getAttribute("index"));
             const project = this.objectList[this.currentProject];
-            
             this.todoListHeading.innerText = project.name;
-            const todoList = new TodoList(this.todoListObject, Todo, project);
+            const todoList = new TodoList(this.todoListObject, Todo, project, this.objectList);
 
             if (document.querySelector("#new-todo-button") === null) {
                 const newTodoButton = document.createElement("button");

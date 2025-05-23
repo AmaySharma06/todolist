@@ -10,3 +10,4 @@ const todoListHeading = document.querySelector(".todolist-heading");
 const projectList = new ProjectList(projectListObject, todoListObject, todoListHeading, Project);
 
 newProjectButton.addEventListener("click", () => projectList.newObject());
+projectList.updateObjectDisplay();
